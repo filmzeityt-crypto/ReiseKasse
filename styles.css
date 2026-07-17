@@ -1,0 +1,395 @@
+:root {
+  --paper: #EEEADC;
+  --paper-card: #FBF9F2;
+  --paper-dark: #E4DFCD;
+  --ink: #26241D;
+  --red: #C24B3B;
+  --blue: #2B4C7E;
+  --gold: #D6A24A;
+  --header-bg: #26241D;
+  --header-fg: #FBF9F2;
+  --btn-bg: #C24B3B;
+  --btn-fg: #FBF9F2;
+  --font-body: 'Inter', sans-serif;
+  --font-display: 'Fraunces', serif;
+  --card-border-w: 1px;
+  --card-radius: 14px;
+  --card-shadow: 0 1px 3px rgba(38, 36, 29, 0.06);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #1b1a15;
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+
+.display { font-family: var(--font-display); }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+
+button { font-family: inherit; cursor: pointer; }
+input, select { font-family: var(--font-body); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: var(--paper-dark); border-radius: 3px; }
+
+/* header */
+.app-header {
+  padding: calc(env(safe-area-inset-top, 0px) + 14px) 16px 14px;
+  background: var(--header-bg);
+  color: var(--header-fg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--gold);
+  flex-shrink: 0;
+}
+.app-header .title { font-size: 18px; font-weight: 600; line-height: 1.1; }
+.app-header .sub { font-size: 11px; opacity: 0.65; margin-top: 2px; }
+.icon-btn { background: transparent; border: none; color: var(--header-fg); opacity: 0.85; padding: 6px; display: flex; }
+
+/* main scroll area */
+.app-main { flex: 1; overflow-y: auto; padding: 16px 16px 100px; }
+
+/* ticket stub card — ruhige Karte, feine Kontur, sanfter Schatten */
+.stub {
+  background: var(--paper-card);
+  border: var(--card-border-w) solid var(--paper-dark);
+  border-radius: var(--card-radius);
+  position: relative;
+  overflow: hidden;
+  padding: 16px;
+  box-shadow: var(--card-shadow);
+}
+
+.stat-row { display: flex; gap: 10px; margin-bottom: 14px; }
+.stat-stub { flex: 1; padding: 12px 14px; }
+.stat-stub .label { display: flex; align-items: center; gap: 6px; font-size: 11px; opacity: 0.65; margin-bottom: 6px; }
+.stat-stub .value { font-size: 18px; font-weight: 600; }
+
+.section-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.card-gap { margin-bottom: 14px; }
+
+.empty-hint { padding: 22px 18px; text-align: center; font-size: 13px; opacity: 0.75; }
+
+.legend-row { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 6px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.legend-label { flex: 1; }
+
+/* bottom nav */
+.bottom-nav {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: var(--paper-card);
+  border-top: 1px solid var(--paper-dark);
+  display: flex; align-items: center;
+  padding: 4px 8px calc(env(safe-area-inset-bottom, 0px) + 4px);
+}
+.nav-item {
+  flex: 1; background: transparent; border: none;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 8px 0; color: #9A9585;
+}
+.nav-item.active { color: var(--ink); }
+.nav-item span { font-size: 11px; }
+.fab {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--btn-bg); color: var(--btn-fg);
+  border: 3px solid var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 10px; box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  transform: translateY(-10px);
+  flex-shrink: 0;
+}
+
+/* category pills */
+.pill-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px; }
+.pill {
+  flex-shrink: 0; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--paper-dark); background: transparent;
+  color: var(--ink); font-size: 12px; font-weight: 600; white-space: nowrap;
+}
+.pill.active { background: color-mix(in srgb, var(--pill-color) 14%, transparent); border-color: var(--pill-color); color: var(--pill-color); }
+
+.cat-chip {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 10px; border-radius: 999px;
+  border: 1px solid var(--paper-dark); background: transparent;
+  font-size: 12px; font-weight: 600; color: var(--ink);
+}
+.cat-chip.active { background: color-mix(in srgb, var(--chip-color) 14%, transparent); border-color: var(--chip-color); color: var(--chip-color); }
+.cat-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* expense row — linke Kante trägt die Kategoriefarbe (gleiche Farben wie im Diagramm) */
+.expense-row { display: flex; align-items: center; gap: 10px; padding: 12px 12px 12px 16px; margin-bottom: 10px; border-left: 4px solid var(--cat, var(--paper-dark)); }
+.expense-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.expense-info { flex: 1; min-width: 0; }
+.expense-cat { font-size: 13px; font-weight: 600; }
+.expense-meta { font-size: 11px; opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.expense-amount { text-align: right; }
+.expense-amount .main { font-size: 14px; font-weight: 600; }
+.expense-amount .sub { font-size: 10px; opacity: 0.55; }
+.del-btn { background: transparent; border: none; color: var(--red); opacity: 0.7; padding: 4px; display: flex; }
+
+/* modal */
+.modal-backdrop {
+  position: absolute; inset: 0; background: rgba(38,36,29,0.55);
+  display: flex; align-items: flex-end; z-index: 20;
+}
+.modal-sheet {
+  width: 100%; max-height: 88%; overflow-y: auto;
+  background: var(--paper); border-top-left-radius: 20px; border-top-right-radius: 20px;
+  padding: 16px 18px calc(env(safe-area-inset-bottom, 0px) + 24px);
+  display: flex; flex-direction: column; gap: 14px;
+  border-top: 3px solid var(--gold);
+}
+/* Wichtig: Kinder des Modals dürfen NICHT zusammengedrückt werden, wenn der
+   Inhalt höher als der Bildschirm ist — sonst quetscht Flexbox Karten mit
+   overflow:hidden auf Null Höhe statt zu scrollen. */
+.modal-sheet > * { flex-shrink: 0; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; }
+.modal-head .display { font-size: 18px; font-weight: 600; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; font-weight: 600; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.4px; }
+.field input, .field select {
+  padding: 10px 12px; border-radius: 8px; border: 1px solid var(--paper-dark);
+  background: var(--paper-card); font-size: 14px; color: var(--ink); width: 100%;
+}
+.field-row { display: flex; gap: 8px; }
+.field-row .field { flex: 1; }
+
+.btn-primary {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px; border-radius: 10px; border: none;
+  background: var(--btn-bg); color: var(--btn-fg); font-size: 14px; font-weight: 600;
+}
+.btn-primary:disabled { opacity: 0.45; }
+.btn-secondary {
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; border: 1px solid var(--paper-dark);
+  background: transparent; color: var(--ink); font-size: 12px; font-weight: 600;
+  padding: 8px 12px;
+}
+.btn-secondary:disabled { opacity: 0.5; }
+
+.rate-status { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.rate-status .info { flex: 1; font-size: 12px; }
+.rate-status .info .title { font-weight: 600; }
+.rate-status .info .desc { opacity: 0.65; margin-top: 2px; }
+
+.rate-list { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; padding-right: 4px; }
+.rate-row { display: flex; align-items: center; gap: 8px; }
+.rate-row .code { width: 44px; font-size: 12px; font-weight: 600; }
+.rate-row input { padding: 6px 8px; }
+.add-currency-row { display: flex; gap: 6px; margin-top: 8px; }
+.add-currency-row input { flex: 1; }
+.hint { font-size: 11px; opacity: 0.6; margin-top: 6px; }
+
+svg.icon { display: block; }
+
+/* =========================================================
+   THEMES — auswählbar in den Einstellungen.
+   Standard (kein Body-Klassenzusatz) = "Papier" (Ist-Zustand).
+========================================================= */
+
+/* 01 BORDKARTE — hell, dokumentenhaft, Mono-Daten */
+body.theme-bordkarte {
+  --paper: #F7F6F2; --paper-card: #FFFFFF; --paper-dark: #191A1C;
+  --ink: #191A1C; --gold: #C2410C;
+  --header-bg: #F7F6F2; --header-fg: #191A1C;
+  --btn-bg: #191A1C; --btn-fg: #F7F6F2;
+  --font-display: 'IBM Plex Mono', monospace;
+  --card-border-w: 1.5px; --card-radius: 8px; --card-shadow: none;
+}
+body.theme-bordkarte .app-header { border-bottom: 2px solid #191A1C; }
+body.theme-bordkarte .display { text-transform: uppercase; letter-spacing: 0.04em; }
+body.theme-bordkarte .expense-row { border-color: #E3E1DA; border-left-color: var(--cat, #E3E1DA); }
+
+/* 02 NACHTFLUG — dunkles Fintech, Amber-Akzent */
+body.theme-nachtflug {
+  --paper: #101418; --paper-card: #1A2027; --paper-dark: #232B34;
+  --ink: #EDEFF2; --gold: #F5B84B; --blue: #60A5FA; --red: #F87171;
+  --header-bg: #101418; --header-fg: #EDEFF2;
+  --btn-bg: #F5B84B; --btn-fg: #14161A;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --card-radius: 14px; --card-shadow: none;
+}
+body.theme-nachtflug .app-header { border-bottom: 1px solid #232B34; }
+body.theme-nachtflug .field input, body.theme-nachtflug .field select,
+body.theme-nachtflug .rate-row input, body.theme-nachtflug .add-currency-row input {
+  background: #1A2027; border-color: #232B34; color: #EDEFF2;
+}
+body.theme-nachtflug .pill { border-color: #232B34; }
+
+/* 03 STICKER — verspielt, Reiseposter-Farben */
+body.theme-sticker {
+  --paper: #FFF6E9; --paper-card: #FFFFFF; --paper-dark: #35281E;
+  --ink: #35281E; --gold: #F4A340; --red: #E4572E; --blue: #1D8A8A;
+  --header-bg: #1D8A8A; --header-fg: #FFF6E9;
+  --btn-bg: #F4A340; --btn-fg: #35281E;
+  --font-body: 'Baloo 2', sans-serif;
+  --font-display: 'Baloo 2', sans-serif;
+  --card-border-w: 2.5px; --card-radius: 16px;
+  --card-shadow: 3px 3px 0 #35281E;
+}
+body.theme-sticker .app-header { border-bottom: none; border-radius: 0 0 22px 22px; }
+body.theme-sticker .btn-primary, body.theme-sticker .fab { border: 2.5px solid #35281E; box-shadow: 3px 3px 0 #35281E; }
+body.theme-sticker .display { font-weight: 800; }
+
+/* 04 KASSENBON — die App als Beleg */
+body.theme-kassenbon {
+  --paper: #DCD9D2; --paper-card: #FCFBF7; --paper-dark: #B9B5AA;
+  --ink: #23211C; --gold: #23211C; --blue: #23211C; 
+  --header-bg: #23211C; --header-fg: #FCFBF7;
+  --btn-bg: #23211C; --btn-fg: #FCFBF7;
+  --font-body: 'IBM Plex Mono', monospace;
+  --font-display: 'IBM Plex Mono', monospace;
+  --card-border-w: 1.5px; --card-radius: 2px; --card-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+body.theme-kassenbon .stub { border-style: dashed; }
+body.theme-kassenbon .display { text-transform: uppercase; letter-spacing: 0.10em; }
+body.theme-kassenbon .expense-row { border-left-style: solid; }
+body.theme-kassenbon .pill, body.theme-kassenbon .cat-chip { border-radius: 2px; }
+
+/* Stil-Wähler in den Einstellungen */
+.theme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.theme-opt {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 12px; border-radius: 10px;
+  border: 1.5px solid var(--paper-dark); background: var(--paper-card);
+  color: var(--ink); font-size: 12.5px; font-weight: 600; font-family: var(--font-body);
+  text-align: left;
+}
+.theme-opt.active { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold) inset; }
+.theme-swatch { display: flex; flex-shrink: 0; border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,0,0,0.15); }
+.theme-swatch i { width: 9px; height: 22px; display: block; }
+
+/* Fotos: Thumbnails, Badge, Galerie, Vollbild */
+.photo-thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.photo-thumbs:empty { display: none; }
+.thumb { position: relative; width: 64px; height: 64px; border-radius: 10px; overflow: hidden; border: 1px solid var(--paper-dark); background: var(--paper-dark); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb-x {
+  position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
+  border-radius: 50%; border: none; background: rgba(0,0,0,0.6); color: #fff;
+  font-size: 13px; line-height: 1; display: flex; align-items: center; justify-content: center;
+}
+.photo-add-btn { display: inline-flex; align-items: center; width: fit-content; cursor: pointer; }
+.photo-badge {
+  display: inline-flex; align-items: center; gap: 3px; margin-left: 6px;
+  font-size: 9px; font-weight: 600; opacity: 0.6; vertical-align: 1px;
+}
+.gal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.gal-cell {
+  position: relative; border: 1px solid var(--paper-dark); border-radius: 10px;
+  overflow: hidden; padding: 0; background: var(--paper-dark); aspect-ratio: 1;
+}
+.gal-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gal-cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.55); color: #fff; font-size: 9px; padding: 3px 5px; text-align: left;
+}
+.photo-viewer {
+  position: absolute; inset: 0; z-index: 40; background: rgba(10, 9, 7, 0.94);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 12px;
+}
+.photo-viewer img { max-width: 100%; max-height: 78%; border-radius: 8px; }
+.viewer-cap { color: #fff; font-size: 12px; opacity: 0.85; margin-top: 12px; text-align: center; }
+.viewer-close { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); right: 12px; background: transparent; border: none; padding: 8px; }
+
+/* Onboarding — Keynote-artige Einblendungen */
+.onboard {
+  position: absolute; inset: 0; z-index: 50;
+  background: var(--paper); color: var(--ink);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 32px 28px calc(env(safe-area-inset-bottom, 0px) + 32px);
+  text-align: center;
+}
+.ob-stage { display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; max-width: 320px; }
+.ob-tag {
+  width: 84px; height: 84px; border-radius: 24px;
+  background: var(--header-bg); display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 30px rgba(38,36,29,0.18);
+}
+.ob-title { font-size: 30px; font-weight: 700; line-height: 1.12; }
+.ob-text { font-size: 15px; opacity: 0.7; line-height: 1.5; max-width: 280px; }
+.ob-feat {
+  display: flex; align-items: center; gap: 12px; text-align: left;
+  background: var(--paper-card); border: var(--card-border-w) solid var(--paper-dark);
+  border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+  padding: 13px 14px; width: 100%; font-size: 13.5px; line-height: 1.4;
+}
+.ob-feat .icon { flex-shrink: 0; }
+.ob-input {
+  width: 100%; padding: 13px 14px; border-radius: 10px;
+  border: var(--card-border-w) solid var(--paper-dark);
+  background: var(--paper-card); color: var(--ink);
+  font-size: 17px; text-align: center; font-family: var(--font-body);
+}
+.onboard .btn-primary { width: 100%; margin-top: 6px; }
+.ob-dots { display: flex; gap: 7px; margin-top: 30px; }
+.ob-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--paper-dark); transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+.ob-dot.active { background: var(--gold); width: 20px; border-radius: 4px; }
+
+/* Die "Keynote"-Einblendung: sanft von unten, minimal skaliert, weich ausklingend */
+@keyframes obIn {
+  from { opacity: 0; transform: translateY(26px) scale(0.965); filter: blur(3px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+.ob-a {
+  opacity: 0;
+  animation: obIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ob-a { animation-duration: 0.01s; animation-delay: 0s; }
+  .ob-dot { transition: none; }
+}
+
+/* Stil-Wahl im Onboarding */
+.ob-theme-grid { width: 100%; }
+.onboard .theme-opt { justify-content: flex-start; }
+
+/* Reise-Wechsler */
+.trip-switch {
+  background: transparent; border: none; color: inherit; padding: 0;
+  font-size: 18px; font-weight: 600; line-height: 1.1;
+  display: flex; align-items: center; gap: 4px; max-width: 100%;
+}
+.trip-row {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--paper-card); border: var(--card-border-w) solid var(--paper-dark);
+  border-radius: var(--card-radius); box-shadow: var(--card-shadow);
+  padding: 4px 6px 4px 12px; margin-bottom: 8px;
+}
+.trip-row.active { border-color: var(--gold); }
+.trip-main { flex: 1; background: transparent; border: none; text-align: left; padding: 8px 0; color: var(--ink); min-width: 0; }
+.trip-name { display: block; font-size: 14px; font-weight: 600; }
+.trip-code { display: block; font-size: 10px; opacity: 0.55; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; }
+.ob-link { background: transparent; border: none; color: var(--ink); opacity: 0.65; font-size: 13px; text-decoration: underline; font-family: var(--font-body); }
+
+/* Flaggen in der Kursliste */
+.rate-row .flag { width: 22px; font-size: 15px; flex-shrink: 0; text-align: center; }
+
+/* Reise-Übersicht (Startbildschirm) */
+.trip-card { display: flex; align-items: center; gap: 6px; padding: 6px 8px 6px 16px; margin-bottom: 12px; }
+.trip-card-main { flex: 1; background: transparent; border: none; text-align: left; padding: 10px 0; color: var(--ink); min-width: 0; }
+.trip-card-name { display: block; font-size: 17px; font-weight: 700; }
+.trip-card-meta { display: block; font-size: 12px; opacity: 0.65; margin-top: 3px; }
+.trip-card-code { display: block; font-size: 10px; opacity: 0.45; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; }
